@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Root Config</title>
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self' https: localhost:*; script-src 'unsafe-inline' 'unsafe-eval' https: localhost:*; connect-src https: localhost:* ws://localhost:*; style-src 'unsafe-inline' https:; object-src 'none';"
+    />
+    <meta name="importmap-type" use-injector />
+    <script type="injector-importmap">
+      {
+        "imports": {
+          "single-spa": "https://cdn.jsdelivr.net/npm/single-spa@6.0.3/lib/es2015/esm/single-spa.min.js"
+        }
+      }
+    </script>
+    <link
+      rel="preload"
+      href="https://cdn.jsdelivr.net/npm/single-spa@6.0.3/lib/es2015/esm/single-spa.min.js"
+      as="module"
+    />
+    <% if (isLocal) { %>
+    <script type="injector-importmap">
+      {
+        "imports": {
+          "react": "https://ga.jspm.io/npm:react@17.0.2/dev.index.js",
+          "react-dom": "https://ga.jspm.io/npm:react-dom@17.0.2/dev.index.js",
+          "@mavi/root-config": "//localhost:9000/mavi-root-config.js",
+          "@mavi/react-app": "http://localhost:8500/mavi-react-app.js"
+        },
+        "scopes": {
+          "https://ga.jspm.io/": {
+            "object-assign": "https://ga.jspm.io/npm:object-assign@4.1.1/index.js",
+            "scheduler": "https://ga.jspm.io/npm:scheduler@0.20.2/dev.index.js",
+            "scheduler/tracing": "https://ga.jspm.io/npm:scheduler@0.20.2/dev.tracing.js"
+          }
+        }
+      }
+    </script>
+    <% } %>
+    <script src="https://cdn.jsdelivr.net/npm/import-map-overrides@4.1.0/dist/import-map-overrides.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@single-spa/import-map-injector@1.1.0/lib/import-map-injector.js"></script>
+  </head>
+  <body>
+    <noscript> You need to enable JavaScript to run this app. </noscript>
+    <main></main>
+    <script>
+      window.importMapInjector.initPromise.then(() => {
+        import("@mavi/root-config");
+      });
+    </script>
+    <import-map-overrides-full
+      show-when-local-storage="devtools"
+      dev-libs
+    ></import-map-overrides-full>
+  </body>
+</html>
